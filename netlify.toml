@@ -1,0 +1,45 @@
+# McLean Pool Services  Netlify Configuration
+
+[build]
+  publish = "."
+    functions = "functions"
+
+    [build.environment]
+      NODE_VERSION = "18"
+
+      [context.production]
+        command = "echo 'Production build ready'"
+
+        [context.deploy-preview]
+          command = "echo 'Preview build ready'"
+
+          # Headers
+          [[headers]]
+            for = "/*"
+              [headers.values]
+                  X-Frame-Options = "DENY"
+                      X-Content-Type-Options = "nosniff"
+                          Referrer-Policy = "strict-origin-when-cross-origin"
+                              Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+                                  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.netlify.app"
+
+                                  [[headers]]
+                                    for = "/assets/*"
+                                      [headers.values]
+                                          Cache-Control = "public, max-age=31536000, immutable"
+
+                                          # Redirects
+                                          [[redirects]]
+                                            from = "/api/submit-review"
+                                              to = "/.netlify/functions/submit-review"
+                                                status = 200
+
+                                                [[redirects]]
+                                                  from = "/api/approve-review"
+                                                    to = "/.netlify/functions/approve-review"
+                                                      status = 200
+
+                                                      [[redirects]]
+                                                        from = "/api/contact"
+                                                          to = "/.netlify/functions/contact-form"
+                                                            status = 200
