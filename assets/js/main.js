@@ -1,42 +1,40 @@
-/* 
-   McLean Pool Services  Main JavaScript
-    */
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadApprovedReviews();
+document.addEventListener('DOMContentLoaded', function() {
+     loadApprovedReviews();
 });
 
-/**
- * Load approved reviews from /data/reviews.json
- * and render them into the #reviews-container element.
- */
-async function loadApprovedReviews() {
-    const container = document.getElementById('reviews-container');
-    if (!container) return;
+function loadApprovedReviews() {
+     var container = document.getElementById('reviews-container');
+     if (!container) return;
 
-  try {
-        const res = await fetch('/data/reviews.json');
-        if (!res.ok) throw new Error('Failed to load reviews');
-        const reviews = await res.json();
+  fetch('/data/reviews.json')
+       .then(function(res) { return res.json(); })
+       .then(function(reviews) {
+                container.innerHTML = '';
+                reviews.slice(0, 5).forEach(function(review) {
+                           var card = document.createElement('div');
+                           card.className = 'review-card';
 
-      container.innerHTML = reviews
-          .slice(0, 5)
-          .map(review => `
-                  >div class="review-card">
-                            >div class="stars">${''.repeat(review.rating)}${''.repeat(5 - review.rating)}>/div>
-                                      >p>${escapeHtml(review.text)}>/p>
-                                                >p class="author"> ${escapeHtml(review.name)}>/p>
-                                                        >/div>
-                                                              `).join('');
-  } catch (err) {
-        console.error('Reviews load error:', err);
-        container.innerHTML = '>p>Reviews coming soon.>/p>';
-  }
-}
+                                                    var starsDiv = document.createElement('div');
+                           starsDiv.className = 'stars';
+                           starsDiv.textContent = '\u2605'.repeat(review.rating) + '\u2606'.repeat(5 - review.rating);
+                           card.appendChild(starsDiv);
 
-/** Escape HTML to prevent XSS */
-function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+                                                    var textP = document.createElement('p');
+                           textP.textContent = review.text;
+                           card.appendChild(textP);
+
+                                                    var authorP = document.createElement('p');
+                           authorP.className = 'author';
+                           authorP.textContent = '\u2014 ' + review.name;
+                           card.appendChild(authorP);
+
+                                                    container.appendChild(card);
+                });
+       })
+       .catch(function(err) {
+                console.error('Reviews load error:', err);
+                var msg = document.createElement('p');
+                msg.textContent = 'Reviews coming soon.';
+                container.appendChild(msg);
+       });
 }
