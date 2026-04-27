@@ -1,5 +1,5 @@
 [build]
-  publish = "/"
+  publish = "."
   command = ""
 
 [[headers]]
@@ -9,7 +9,3 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-
-# No CSP. No redirects. No asset blocking.
-
-  status = 200
