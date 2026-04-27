@@ -13,7 +13,9 @@
 [context.deploy-preview]
   command = "echo 'Preview build ready'"
 
+# -------------------------
 # Global Security Headers
+# -------------------------
 [[headers]]
   for = "/*"
   [headers.values]
@@ -21,15 +23,20 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.netlify.app"
+    # Clean, safe, functional CSP for your site
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://*.netlify.app"
 
+# -------------------------
 # Cache static assets
+# -------------------------
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# -------------------------
 # API Redirects → Netlify Functions
+# -------------------------
 [[redirects]]
   from = "/api/submit-review"
   to = "/.netlify/functions/submit-review"
@@ -44,4 +51,3 @@
   from = "/api/contact"
   to = "/.netlify/functions/contact-form"
   status = 200
-
