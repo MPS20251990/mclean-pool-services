@@ -81,7 +81,13 @@
 
     <!-- CONTACT FORM -->
     <form name="contact" netlify method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/pages/thank-you.html" id="contactForm">
+
+      <!-- REQUIRED FOR NETLIFY DETECTION -->
       <input type="hidden" name="form-name" value="contact">
+      <!-- SECOND HIDDEN INPUT YOU REQUESTED -->
+      <input type="hidden" name="form-name" value="contact">
+
+      <!-- HONEYPOT -->
       <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
 
       <label>Your Name *<br>
@@ -120,7 +126,6 @@
       submitBtn.classList.add("loading");
     });
 
-    // OPTIONAL: Show banners if redirected back with query params
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
       successBanner.style.display = "block";
